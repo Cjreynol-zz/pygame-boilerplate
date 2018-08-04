@@ -1,6 +1,8 @@
 from pygame         import Rect
 from pygame.math    import Vector2
 
+from image_loading  import split_surface
+
 
 class Animator:
     """
@@ -23,9 +25,8 @@ class Animator:
         self.loop = loop
         self.frame_count = 0
 
-        self.images = self._create_images(sprite_sheet, size)
+        self.images = split_surface(sprite_sheet, size)
         self.image_index = 0
-
 
     def update(self, *args):
         """
@@ -54,19 +55,3 @@ class Animator:
         Return the current image.
         """
         return self.images[self.image_index]
-
-    def _create_images(self, sprite_sheet, size):
-        """
-        Break down the sprite_sheet into a list of images, one for each frame 
-        of animation.
-        """
-        images = []
-        rect = Rect((0, 0), size)
-        image_count = sprite_sheet.get_width() // rect.width
-
-        for i in range(image_count):
-            image = sprite_sheet.subsurface(rect)
-            images.append(image)
-            rect.left += rect.width
-
-        return images

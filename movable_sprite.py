@@ -35,3 +35,8 @@ class MovableSprite(Sprite):
         new_image = self.animator.update()
         if new_image is not None:
             self.image = new_image
+
+    def change_velocity(self, delta_v):
+        """
+        """
+        self.velocity += Vector2(delta_v)
