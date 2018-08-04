@@ -5,4 +5,11 @@ to get a little boilerplate in place for whatever kind of game I decide to
 make for it.
 
 ### Version 1
-Moving a ghost sprite around the screen
+Moving a ghost sprite around the screen  
+
+### Version 2
+Animated sprite moving on the screen  
+
+### Version 3
+Smooth movement, automatic animation from a sprite sheet, and re-usable code 
+behind the scenes  
