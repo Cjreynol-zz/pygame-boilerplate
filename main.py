@@ -7,16 +7,19 @@ from pygame.math        import Vector2
 from pygame.sprite      import RenderUpdates
 from pygame.time        import Clock
 
-
 from movable_sprite    import MovableSprite
 
 
 FPS = 30
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 800      # 32 * 25
+SCREEN_HEIGHT = 640     # 32 * 20
 BACKGROUND_COLOR = (25, 25, 255)
 TITLE = "LD42 Testing"
 IMG_DIR = "imgs"
+
+GHOST_SPRITE_SHEET = "boo_spritesheet.png"
+SPRITE_SIZE = (32, 32)
+FRAME_LENGTH = FPS // 6
 VELOCITY = 128
 
 done = False
@@ -67,8 +70,8 @@ def handle_events(event_list):
         elif event.type == KEYUP and event.key == K_LEFT:
             ghost.velocity -= Vector2(-VELOCITY, 0)
 
-sheet = load_image("boo_spritesheet.png")
-ghost = MovableSprite(sheet, (32, 32), FPS // 2, True)
+sheet = load_image(GHOST_SPRITE_SHEET)
+ghost = MovableSprite(sheet, SPRITE_SIZE, FRAME_LENGTH, True)
 group = RenderUpdates(ghost)
 
 def main():
