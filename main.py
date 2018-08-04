@@ -1,19 +1,23 @@
-from os             import path
-from pygame         import draw, display, event, image, init, quit, Surface
+from os                 import path
 
-from pygame.locals  import (QUIT, KEYDOWN, KEYUP,
-                            K_DOWN, K_ESCAPE, K_LEFT, K_UP, K_RIGHT)
+from pygame             import draw, display, event, image, init, quit, Surface
+from pygame.locals      import (QUIT, KEYDOWN, KEYUP,
+                                K_DOWN, K_ESCAPE, K_LEFT, K_UP, K_RIGHT)
+from pygame.math        import Vector2
+from pygame.sprite      import RenderUpdates
+from pygame.time        import Clock
 
-from pygame.time    import Clock
+
+from movable_sprite    import MovableSprite
 
 
-# globals
 FPS = 30
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-BACKGROUND_COLOR = (255, 255, 255)
+BACKGROUND_COLOR = (25, 25, 255)
 TITLE = "LD42 Testing"
-IMG_DIR = "img"
+IMG_DIR = "imgs"
+VELOCITY = 128
 
 done = False
 clock = Clock()
@@ -25,69 +29,57 @@ background.fill(BACKGROUND_COLOR)
 screen.blit(background, (0, 0))
 display.flip()
 
-ghost_sprites = [image.load(path.join(IMG_DIR, "pix_boo.png"))
-                    .convert_alpha(),
-                    image.load(path.join(IMG_DIR, "pix_boo2.png"))
-                    .convert_alpha()]
-animation_index = 0
-animation_speed = FPS // 2
-animation_index_limit = len(ghost_sprites) * animation_speed
+def load_image(filename):
+    full_path = path.join(IMG_DIR, filename)
+    sprite = image.load(full_path)
+    if sprite.get_alpha() is not None:
+        sprite = sprite.convert_alpha()
+    else:
+        sprite = sprite.convert()
+    return sprite
 
-ghost_x, ghost_y = 10, 10
-ghost_size = ghost_sprites[0].get_width(), ghost_sprites[0].get_height()
-ghost_vel = 32
-last_rect = None
-
-
-# helpers
 def handle_events(event_list):
-    global ghost_x
-    global ghost_y
     global done
+    global ghost
 
     for event in event_list:
         if (event.type == QUIT or
             (event.type == KEYDOWN and event.key == K_ESCAPE)):
             done = True
+
         if event.type == KEYDOWN and event.key == K_DOWN:
-            ghost_y += ghost_vel
+            ghost.velocity += Vector2(0, VELOCITY)
+        elif event.type == KEYUP and event.key == K_DOWN:
+            ghost.velocity -= Vector2(0, VELOCITY)
+
         elif event.type == KEYDOWN and event.key == K_UP:
-            ghost_y -= ghost_vel
+            ghost.velocity += Vector2(0, -VELOCITY)
+        elif event.type == KEYUP and event.key == K_UP:
+            ghost.velocity -= Vector2(0, -VELOCITY)
+            
         elif event.type == KEYDOWN and event.key == K_RIGHT:
-            ghost_x += ghost_vel
+            ghost.velocity += Vector2(VELOCITY, 0)
+        elif event.type == KEYUP and event.key == K_RIGHT:
+            ghost.velocity -= Vector2(VELOCITY, 0)
+
         elif event.type == KEYDOWN and event.key == K_LEFT:
-            ghost_x -= ghost_vel
+            ghost.velocity += Vector2(-VELOCITY, 0)
+        elif event.type == KEYUP and event.key == K_LEFT:
+            ghost.velocity -= Vector2(-VELOCITY, 0)
 
-def clear():
-    global last_rect
-
-    ghost_pos = ghost_x, ghost_y
-    last_rect = screen.blit(background, ghost_pos, ghost_pos + ghost_size)
-    
-
-def render():
-    global animation_index
-
-    animation_index += 1
-    if animation_index >= animation_index_limit:
-        animation_index = 0
-
-    sprite_rect = screen.blit(ghost_sprites[animation_index 
-                                                // animation_speed], 
-                                (ghost_x, ghost_y))
-
-    dirty_rects = [sprite_rect]
-    if last_rect is not None:
-        dirty_rects.append(last_rect)
-
-    display.update(dirty_rects)
+sheet = load_image("boo_spritesheet.png")
+ghost = MovableSprite(sheet, (32, 32), FPS // 2, True)
+group = RenderUpdates(ghost)
 
 def main():
     while not done:
         clock.tick(FPS)
-        clear()
+        group.clear(screen, background)
         handle_events(event.get())
-        render()
+
+        group.update(FPS)
+        dirty_rects = group.draw(screen)
+        display.update(dirty_rects)
 
 if __name__ == "__main__":
     init()
