@@ -15,7 +15,7 @@ class MovableSprite(AnimatedSprite):
         self.velocity = Vector2()       # pixels per frame
 
 
-    def update(self, frame_rate):
+    def update(self, frame_rate, collide_group):
         """
         Move the sprite a fraction of its velocity (vel / frame_rate).
 

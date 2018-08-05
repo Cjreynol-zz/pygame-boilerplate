@@ -7,9 +7,12 @@ from boilerplate.game_state     import GameState
 class Game:
     """
     """
+    
+    TITLE = "LD42 Testing"
+    SCREEN_SIZE = (800, 640)
 
     def __init__(self):
-        self.screen = GameScreen()
+        self.screen = GameScreen(self.TITLE, self.SCREEN_SIZE)
         self.state = GameState()
         
     def run(self):
@@ -20,11 +23,11 @@ class Game:
 
         while not self.state.done:
             self.state.tick()
-            self.screen.clear(self.state.ghost_group)
+            self.screen.clear(self.state.get_groups())
             self.state.handle_events(event.get())
 
             self.state.update()
-            dirty_rects = self.screen.draw(self.state.ghost_group)
+            dirty_rects = self.screen.draw(self.state.get_groups())
             self.screen.update_display(dirty_rects)
 
         quit()
