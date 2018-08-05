@@ -1,16 +1,15 @@
-from pygame         import Rect
 from pygame.math    import Vector2
+from pygame.sprite  import Sprite
 
 from image_loading  import split_surface
 
 
-class Animator:
+class AnimatedSprite(Sprite):
     """
-    Keeps track of the information needed to animate a Sprite and returns any 
-    new images during updates.
+    Add attributes and update logic for the sprite to cycle through images.
     """
     
-    def __init__(self, sprite_sheet, size, frame_length, loop):
+    def __init__(self, sprite_sheet, size, frame_length, loop, *groups):
         """
         Initialize data used for animating the sprite.
 
@@ -20,7 +19,10 @@ class Animator:
         frame_length    - number of frames per image in the animation
         loop            - boolean indicating if the animation should restart 
                             at end
+        groups          - sprite groups for the sprite to join
         """
+        super().__init__(groups)
+
         self.frame_length = frame_length
         self.loop = loop
         self.frame_count = 0
@@ -28,12 +30,13 @@ class Animator:
         self.images = split_surface(sprite_sheet, size)
         self.image_index = 0
 
+        self.image = self.images[self.image_index]
+        self.rect = self.image.get_rect()
+
     def update(self, *args):
         """
-        Update the frame count and return a new image if the frame length has 
-        been reached.
+        Update the image as the game progresses
         """
-        new_image = None
         if self.frame_count >= self.frame_length:
             self.frame_count = 0
 
@@ -41,17 +44,10 @@ class Animator:
             if self.image_index >= len(self.images):
                 if self.loop:
                     self.image_index = 0
-                    new_image = self.get_image()
-                else:   # keeps image_index from growing endlessly
+                    self.image = self.images[self.image_index]
+                else:   # keeps image_index from growing without bound
                     self.image_index -= 1
             else:
-                new_image = self.get_image()
+                self.image = self.images[self.image_index]
 
         self.frame_count += 1
-        return new_image
-
-    def get_image(self):
-        """
-        Return the current image.
-        """
-        return self.images[self.image_index]

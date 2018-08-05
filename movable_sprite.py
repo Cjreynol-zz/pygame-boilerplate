@@ -1,24 +1,18 @@
-from animator       import Animator
+from pygame.math        import Vector2
 
-from pygame.math    import Vector2
-from pygame.sprite  import Sprite
+from animated_sprite    import AnimatedSprite
 
 
-class MovableSprite(Sprite):
+class MovableSprite(AnimatedSprite):
     """
-    Adds the attributes and update method logic for moving the sprite on the 
-    screen.
+    Add attribute and update logic for the sprite to move around.
     """
 
     def __init__(self, image, size, frame_length = 0, loop = False, 
                     *groups):
-        super().__init__(groups)
+        super().__init__(image, size, frame_length, loop, groups)
 
-        self.animator = Animator(image, size, frame_length, loop)
-        self.image = self.animator.get_image()
-        self.rect = self.image.get_rect()
-
-        self.velocity = Vector2()       # distance, expected per second value
+        self.velocity = Vector2()       # pixels per frame
 
 
     def update(self, frame_rate):
@@ -30,13 +24,8 @@ class MovableSprite(Sprite):
         values) that the total velocity will be wrong.  A future version 
         should correct this.
         """
+        super().update()
         self.rect.topleft += self.velocity / frame_rate
 
-        new_image = self.animator.update()
-        if new_image is not None:
-            self.image = new_image
-
     def change_velocity(self, delta_v):
-        """
-        """
         self.velocity += Vector2(delta_v)

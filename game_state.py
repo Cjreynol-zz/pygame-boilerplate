@@ -12,9 +12,7 @@ from movable_sprite import MovableSprite
 class GameState:
     
     FPS = 30
-
-    ANIMATION_FRAMES = 5
-
+    GHOST_ANIMATION_LENGTH = 5      # in frames
     VELOCITY = 128
 
     def __init__(self):
@@ -28,7 +26,8 @@ class GameState:
         ghost_path = path.join("imgs", "boo_spritesheet.png")
 
         sheet = load_image(ghost_path)
-        ghost = MovableSprite(sheet, (32, 32), self.ANIMATION_FRAMES, True)
+        ghost = MovableSprite(sheet, (32, 32), self.GHOST_ANIMATION_LENGTH, 
+                                True)
         return ghost
 
     def tick(self):
