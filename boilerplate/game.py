@@ -1,7 +1,7 @@
-from pygame             import event, init, quit
+from pygame                     import event, init, quit
 
-from game_screen        import GameScreen
-from game_state         import GameState
+from boilerplate.game_screen    import GameScreen
+from boilerplate.game_state     import GameState
 
 
 class Game:

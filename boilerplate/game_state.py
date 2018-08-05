@@ -1,29 +1,31 @@
-from os             import path
+from os                         import path
 
-from pygame.locals  import (QUIT, KEYDOWN, KEYUP,
+from pygame.locals              import (QUIT, KEYDOWN, KEYUP,
                                 K_DOWN, K_ESCAPE, K_LEFT, K_UP, K_RIGHT)
-from pygame.sprite  import RenderUpdates
-from pygame.time    import Clock
+from pygame.sprite              import RenderUpdates
+from pygame.time                import Clock
 
-from image_loading  import load_image
-from movable_sprite import MovableSprite
+from boilerplate.image_loading  import load_image
+from boilerplate.movable_sprite import MovableSprite
 
 
 class GameState:
+    """
+    """
     
     FPS = 30
     GHOST_ANIMATION_LENGTH = 5      # in frames
     VELOCITY = 128
 
     def __init__(self):
-        self.ghost = self._create_ghost()
-        self.ghost_group = RenderUpdates(self.ghost)
         self.clock = Clock()
-
         self.done = False
 
+        self.ghost = self._create_ghost()
+        self.ghost_group = RenderUpdates(self.ghost)
+
     def _create_ghost(self):
-        ghost_path = path.join("imgs", "boo_spritesheet.png")
+        ghost_path = path.join("assets", "boo_spritesheet.png")
 
         sheet = load_image(ghost_path)
         ghost = MovableSprite(sheet, (32, 32), self.GHOST_ANIMATION_LENGTH, 
@@ -61,4 +63,3 @@ class GameState:
                 self.ghost.change_velocity((-self.VELOCITY, 0))
             elif event.type == KEYUP and event.key == K_LEFT:
                 self.ghost.change_velocity((self.VELOCITY, 0))
-

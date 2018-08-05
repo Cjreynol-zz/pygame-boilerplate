@@ -1,7 +1,7 @@
-from pygame.math    import Vector2
-from pygame.sprite  import Sprite
+from pygame.math                import Vector2
+from pygame.sprite              import Sprite
 
-from image_loading  import split_surface
+from boilerplate.image_loading  import split_surface
 
 
 class AnimatedSprite(Sprite):

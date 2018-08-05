@@ -1,4 +1,4 @@
-from game import Game
+from boilerplate.game import Game
 
 
 def main():

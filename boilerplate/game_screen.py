@@ -1,4 +1,4 @@
-from pygame         import display, Surface
+from pygame import display, Surface
 
 
 class GameScreen:

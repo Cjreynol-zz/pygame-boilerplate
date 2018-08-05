@@ -1,6 +1,6 @@
-from pygame.math        import Vector2
+from pygame.math                    import Vector2
 
-from animated_sprite    import AnimatedSprite
+from boilerplate.animated_sprite    import AnimatedSprite
 
 
 class MovableSprite(AnimatedSprite):
