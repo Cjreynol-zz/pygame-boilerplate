@@ -1,4 +1,5 @@
 from pygame.math                    import Vector2
+from pygame.sprite                  import spritecollide
 
 from boilerplate.animated_sprite    import AnimatedSprite
 
@@ -14,7 +15,6 @@ class MovableSprite(AnimatedSprite):
 
         self.velocity = Vector2()       # pixels per frame
 
-
     def update(self, frame_rate, collide_group):
         """
         Move the sprite a fraction of its velocity (vel / frame_rate).
@@ -25,7 +25,20 @@ class MovableSprite(AnimatedSprite):
         should correct this.
         """
         super().update()
-        self.rect.topleft += self.velocity / frame_rate
+
+        change = self.velocity / frame_rate
+        self.rect.topleft += change
+        collisions = spritecollide(self, collide_group, False)
+        if collisions:
+            for collision in collisions:
+                if collision.rect.collidepoint(self.rect.midtop):
+                    self.rect.top = collision.rect.bottom
+                elif collision.rect.collidepoint(self.rect.midright):
+                    self.rect.right = collision.rect.left
+                elif collision.rect.collidepoint(self.rect.midbottom):
+                    self.rect.bottom = collision.rect.top
+                elif collision.rect.collidepoint(self.rect.midleft):
+                    self.rect.left = collision.rect.right
 
     def change_velocity(self, delta_v):
         self.velocity += Vector2(delta_v)

@@ -1,8 +1,8 @@
 from os                         import path
 
 from pygame                     import Rect, Surface
-from pygame.locals              import (QUIT, KEYDOWN, KEYUP,
-                                K_DOWN, K_ESCAPE, K_LEFT, K_UP, K_RIGHT)
+from pygame.locals              import (QUIT, K_DOWN, K_ESCAPE, K_LEFT, 
+                                            K_UP, K_RIGHT, KEYDOWN, KEYUP)
 from pygame.sprite              import Sprite, RenderUpdates
 from pygame.time                import Clock
 
@@ -16,8 +16,8 @@ class GameState:
     
     FPS = 30
     GHOST_ANIMATION_LENGTH = 5      # in frames
-    VELOCITY = 128
-    JUMP_VELOCITY = 256
+    VELOCITY = 192
+    JUMP_VELOCITY = VELOCITY * 2
 
     IMG_DIR = "assets"
 
@@ -36,7 +36,7 @@ class GameState:
         sprite_sheet = load_image(ghost_path)
         ghost =  MovableSprite(sprite_sheet, (32, 32), 
                                 self.GHOST_ANIMATION_LENGTH, True)
-        ghost.rect.midtop = (384, 0)
+        ghost.rect.midtop = (384, 304)
         ghost.change_velocity((0, self.VELOCITY))
         return ghost
 

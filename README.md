@@ -13,3 +13,6 @@ Animated sprite moving on the screen
 ### Version 3
 Smooth movement, automatic animation from a sprite sheet, and re-usable code 
 behind the scenes  
+
+### Version 4
+Walls and floor, simple collisions, simple "gravity"  
