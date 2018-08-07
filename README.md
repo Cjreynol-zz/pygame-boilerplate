@@ -16,3 +16,6 @@ behind the scenes
 
 ### Version 4
 Walls and floor, simple collisions, simple "gravity"  
+
+### Version 5
+Better gravity and movement, kind of weird jumping  

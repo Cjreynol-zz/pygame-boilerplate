@@ -16,7 +16,8 @@ class GameState:
     
     FPS = 30
     GHOST_ANIMATION_LENGTH = 5      # in frames
-    VELOCITY = 192
+    GRAVITY = (0, 256)
+    VELOCITY = 128
     JUMP_VELOCITY = VELOCITY * 2
 
     IMG_DIR = "assets"
@@ -37,7 +38,7 @@ class GameState:
         ghost =  MovableSprite(sprite_sheet, (32, 32), 
                                 self.GHOST_ANIMATION_LENGTH, True)
         ghost.rect.midtop = (384, 304)
-        ghost.change_velocity((0, self.VELOCITY))
+        ghost.change_acceleration(self.GRAVITY)
         return ghost
 
     def _create_walls(self):
@@ -102,8 +103,8 @@ class GameState:
 
             elif event.type == KEYDOWN and event.key == K_UP:
                 self.ghost.change_velocity((0, -self.JUMP_VELOCITY))
-            elif event.type == KEYUP and event.key == K_UP:
-                self.ghost.change_velocity((0, self.JUMP_VELOCITY))
+#            elif event.type == KEYUP and event.key == K_UP:
+#                self.ghost.change_velocity((0, self.JUMP_VELOCITY))
                 
             elif event.type == KEYDOWN and event.key == K_RIGHT:
                 self.ghost.change_velocity((self.VELOCITY, 0))
