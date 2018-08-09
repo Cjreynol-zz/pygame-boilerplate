@@ -1,3 +1,5 @@
+from itertools import chain
+
 from pygame.math                    import Vector2
 from pygame.sprite                  import spritecollide
 
@@ -16,7 +18,9 @@ class MovableSprite(AnimatedSprite):
         self.velocity = Vector2()       # pixels per frame
         self.acceleration = Vector2()
 
-    def update(self, frame_rate, collide_group):
+        self.jumping = False
+
+    def update(self, frame_rate, collide_groups):
         """
         Move the sprite a fraction of its velocity (vel / frame_rate).
 
@@ -33,7 +37,7 @@ class MovableSprite(AnimatedSprite):
         self.change_position(delta_d)
         self.change_velocity(delta_v)
 
-        collisions = self._detect_collisions(collide_group)
+        collisions = self._detect_collisions(collide_groups)
         self._handle_collisions(collisions)
 
     def _handle_collisions(self, collisions):
@@ -49,19 +53,22 @@ class MovableSprite(AnimatedSprite):
                 elif collision.rect.collidepoint(self.rect.midbottom):
                     self.rect.bottom = collision.rect.top
                     self.change_velocity((0, -self.velocity.y))
+                    self.jumping = False
                 elif collision.rect.collidepoint(self.rect.midleft):
                     self.rect.left = collision.rect.right
 
-    def _detect_collisions(self, collide_group):
+    def _detect_collisions(self, collide_groups):
         """
-        Determine if this Sprite intersects any of the Sprites in the other 
-        group.
+        Determine if this Sprite intersects any of the Sprites in any of the 
+        collision groups.
 
         ** NOTE **
         Very simple, fails to act as expected if the velocity moves this 
         Sprite through the colliding sprite
         """
-        return spritecollide(self, collide_group, False)
+        collision_lists = [spritecollide(self, group, False) 
+                            for group in collide_groups]
+        return list(chain.from_iterable(collision_lists))   # flatten
 
     def change_velocity(self, delta_v):
         self.velocity += Vector2(delta_v)

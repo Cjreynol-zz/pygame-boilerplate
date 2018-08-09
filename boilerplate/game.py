@@ -1,33 +1,35 @@
 from pygame                     import event, init, quit
+from pygame.time                import Clock
 
 from boilerplate.game_screen    import GameScreen
-from boilerplate.game_state     import GameState
 
 
 class Game:
     """
+    The manager class for controlling the game screen and running the game 
+    state.
     """
     
-    TITLE = "LD42 Testing"
     SCREEN_SIZE = (800, 640)
+    FPS = 30
 
-    def __init__(self):
-        self.screen = GameScreen(self.TITLE, self.SCREEN_SIZE)
-        self.state = GameState()
+    def __init__(self, title):
+        self.screen = GameScreen(title, self.SCREEN_SIZE)
+        self.clock = Clock()
         
-    def run(self):
+    def run(self, state):
         """
-        Run the main logic loop of the game.
+        Play the game until it reaches a final state. 
         """
         init()
 
-        while not self.state.done:
-            self.state.tick()
-            self.screen.clear(self.state.get_groups())
-            self.state.handle_events(event.get())
+        while not state.done:
+            self.clock.tick(self.FPS)
+            self.screen.clear(state.get_all_groups())
+            state.handle_events(event.get())
 
-            self.state.update()
-            dirty_rects = self.screen.draw(self.state.get_groups())
+            state.update()
+            dirty_rects = self.screen.draw(state.get_all_groups())
             self.screen.update_display(dirty_rects)
 
         quit()
