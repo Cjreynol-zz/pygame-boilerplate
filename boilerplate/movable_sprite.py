@@ -1,19 +1,18 @@
-from itertools import chain
+from itertools                          import chain
 
-from pygame.math                    import Vector2
-from pygame.sprite                  import spritecollide
+from pygame.math                        import Vector2
+from pygame.sprite                      import spritecollide
 
-from boilerplate.animated_sprite    import AnimatedSprite
+from boilerplate.multi_animated_sprite  import MultiAnimatedSprite
 
 
-class MovableSprite(AnimatedSprite):
+class MovableSprite(MultiAnimatedSprite):
     """
     Add attribute and update logic for the sprite to move around.
     """
 
-    def __init__(self, image, size, frame_length = 0, loop = False, 
-                    *groups):
-        super().__init__(image, size, frame_length, loop, groups)
+    def __init__(self, animation_dict, start_position):
+        super().__init__(animation_dict, start_position)
 
         self.velocity = Vector2()       # pixels per frame
         self.acceleration = Vector2()
@@ -35,11 +34,8 @@ class MovableSprite(AnimatedSprite):
         """
         super().update()
 
-        delta_d = self.velocity
-        delta_v = self.acceleration
-
-        self.position += delta_d 
-        self.velocity += delta_v
+        self.position += self.velocity
+        self.velocity += self.acceleration
 
         static_collisions = self._detect_collisions(static_groups)
         self._handle_collisions(static_collisions)
@@ -60,7 +56,7 @@ class MovableSprite(AnimatedSprite):
                     self.rect.right = collision.rect.left
                 elif collision.rect.collidepoint(self.rect.midbottom):
                     self.rect.bottom = collision.rect.top
-                    self.velocity += (0, -self.velocity.y)
+                    self.velocity.y += -self.velocity.y
                     self.jumping = False
                 elif collision.rect.collidepoint(self.rect.midleft):
                     self.rect.left = collision.rect.right

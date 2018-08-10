@@ -21,4 +21,7 @@ Walls and floor, simple collisions, simple "gravity"
 Better gravity and movement, kind of weird jumping  
 
 ### Version 6
-Even better gravity and jumping, platforms, collectable items
+Even better gravity and jumping, platforms, collectable items  
+
+### Version 7
+Multiple animations for the same sprite  

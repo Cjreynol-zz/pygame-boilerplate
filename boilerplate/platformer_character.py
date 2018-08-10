@@ -1,32 +1,18 @@
-from os                         import path
-
-from boilerplate.game           import Game
-from boilerplate.image_loading  import load_image
-from boilerplate.movable_sprite import MovableSprite
+from boilerplate.movable_sprite     import MovableSprite
 
 
-class Ghost(MovableSprite):
+class PlatformerCharacter(MovableSprite):
     """
     """
 
-    SPRITE_PATH = path.join("example", "assets", "boo_spritesheet.png")
-    SPRITE_SHEET_SIZE = (6, 1)
-    ANIMATION_LENGTH = 5
-
-    START_POS = (Game.SCREEN_SIZE[0] // 2, Game.SCREEN_SIZE[1] // 2)
     GRAVITY = (0, 0.4)
-    FRICTION_VALUE = -5
-
-    PLAYER_ACCELERATION = 1
     VELOCITY = 5
-    JUMP_VELOCITY = 12
+    JUMP_VELOCITY = 11
     DOWN_VELOCITY = 2
 
-    def __init__(self):
-        super().__init__(load_image(self.SPRITE_PATH), self.SPRITE_SHEET_SIZE,  
-                            self.ANIMATION_LENGTH, True)
+    def __init__(self, animation_dict, start_position):
+        super().__init__(animation_dict, start_position)
 
-        self.position = self.START_POS
         self.acceleration += self.GRAVITY
 
     def jump(self):

@@ -33,3 +33,11 @@ def split_surface(sprite_sheet, subsurface_tuple):
             subsurfaces.append(sprite_sheet.subsurface(rect))
 
     return subsurfaces
+
+def create_animation_list(filepath, subsurface_tuple):
+    """
+    Compose the loading and splitting of an image to create the final list 
+    of animation images.
+    """
+    sprite_sheet = load_image(filepath)
+    return split_surface(sprite_sheet, subsurface_tuple)

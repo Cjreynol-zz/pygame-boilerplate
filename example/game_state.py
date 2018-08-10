@@ -1,29 +1,35 @@
-from os                             import path
+from os                                 import path
 
-from pygame.locals                  import (QUIT, K_DOWN, K_ESCAPE, K_LEFT, 
-                                                K_UP, K_RIGHT, KEYDOWN, KEYUP)
-from pygame.sprite                  import RenderUpdates
+from pygame.locals                      import (QUIT, K_DOWN, K_ESCAPE, 
+                                                K_LEFT, K_UP, K_RIGHT, 
+                                                KEYDOWN, KEYUP)
+from pygame.sprite                      import RenderUpdates
 
-from boilerplate.animated_sprite    import AnimatedSprite
-from boilerplate.image_loading      import load_image
-from boilerplate.game               import Game
-from boilerplate.game_state_abc     import GameStateABC
-from boilerplate.platform           import Platform
-
-from example.ghost                  import Ghost
+from boilerplate.animation              import Animation
+from boilerplate.animation_state        import AnimationState
+from boilerplate.animated_sprite        import AnimatedSprite
+from boilerplate.image_loading          import load_image
+from boilerplate.game                   import Game
+from boilerplate.game_state_abc         import GameStateABC
+from boilerplate.platform               import Platform
+from boilerplate.platformer_character   import PlatformerCharacter
 
 
 class GameState(GameStateABC):
     """
     """
     
+    GHOST_PATH = path.join("example", "assets", "boo_spritesheet.png")
+    GHOST_SHEET_SIZE = (6, 1)
+
     WALL_PATH = path.join("example", "assets", "wood_panel_tile.png")
     PICKUP_PATH = path.join("example", "assets", "pickup_sheet.png")
+    PICKUP_SHEET_SIZE = (2, 1)
 
     def __init__(self):
         super().__init__()
 
-        self.ghost = Ghost()
+        self.ghost = self._create_ghost()
         self.ghost_group = RenderUpdates(self.ghost)
 
         walls = self._create_walls()
@@ -31,6 +37,13 @@ class GameState(GameStateABC):
 
         pickups = self._create_pickups()
         self.pickup_group = RenderUpdates(*pickups)
+
+    def _create_ghost(self):
+        ghost_animations = {AnimationState.IDLE : 
+                                Animation(self.GHOST_PATH, 
+                                            self.GHOST_SHEET_SIZE, 5, True)}
+                                    
+        return PlatformerCharacter(ghost_animations, (400, 200))
 
     def _create_walls(self):
         wall_tile = load_image(self.WALL_PATH)
@@ -58,17 +71,20 @@ class GameState(GameStateABC):
         return [bottom, left, right, platform1, platform2]
 
     def _create_pickups(self):
-        pickup_sheet = load_image(self.PICKUP_PATH)
-        pickup1 = AnimatedSprite(pickup_sheet, (2, 1), 15, True)
-        pickup1.rect.topleft = (Game.SCREEN_SIZE[0] // 2 
-                                    - Game.SQUARE_SIZE[0], 
-                                Game.SCREEN_SIZE[1] * 5 / 6 
-                                    - Game.SQUARE_SIZE[1])
-        pickup2 = AnimatedSprite(pickup_sheet, (2, 1), 15, True)
-        pickup2.rect.topleft = (Game.SCREEN_SIZE[0] // 2 
-                                    - Game.SQUARE_SIZE[0] * 4,
-                                Game.SCREEN_SIZE[1] * 3 / 5 
-                                    - Game.SQUARE_SIZE[1])
+        pickup_animation = Animation(self.PICKUP_PATH, self.PICKUP_SHEET_SIZE, 
+                                        15, True)
+
+        pickup1 = AnimatedSprite(pickup_animation, 
+                                    (Game.SCREEN_SIZE[0] // 2 
+                                        - Game.SQUARE_SIZE[0], 
+                                    Game.SCREEN_SIZE[1] * 5 / 6 
+                                        - Game.SQUARE_SIZE[1]))
+
+        pickup2 = AnimatedSprite(pickup_animation,
+                                    (Game.SCREEN_SIZE[0] // 2 
+                                        - Game.SQUARE_SIZE[0] * 4,
+                                    Game.SCREEN_SIZE[1] * 3 / 5 
+                                        - Game.SQUARE_SIZE[1]))
         return [pickup1, pickup2]
 
     def get_all_groups(self):

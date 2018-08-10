@@ -22,6 +22,10 @@ class GameStateABC(ABC):
     def get_collectable_groups(self):
         pass
 
+    @abstractmethod
+    def handle_events(self):
+        pass
+
     def update(self):
         for group in self.get_all_groups():
             group.update(self.get_static_groups(), 
