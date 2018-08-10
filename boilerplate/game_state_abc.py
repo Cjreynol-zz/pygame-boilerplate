@@ -7,8 +7,7 @@ class GameStateABC(ABC):
     boilerplate framework.
     """
 
-    def __init__(self, fps):
-        self.fps = fps
+    def __init__(self):
         self.done = False
 
     @abstractmethod
@@ -21,4 +20,4 @@ class GameStateABC(ABC):
 
     def update(self):
         for group in self.get_all_groups():
-            group.update(self.fps, self.get_collide_groups())
+            group.update(self.get_collide_groups())

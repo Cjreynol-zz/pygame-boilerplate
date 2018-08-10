@@ -11,6 +11,7 @@ class Game:
     """
     
     SCREEN_SIZE = (800, 640)
+    SQUARE_SIZE = (32, 32)
     FPS = 30
 
     def __init__(self, title):

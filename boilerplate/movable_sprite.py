@@ -20,22 +20,25 @@ class MovableSprite(AnimatedSprite):
 
         self.jumping = False
 
-    def update(self, frame_rate, collide_groups):
-        """
-        Move the sprite a fraction of its velocity (vel / frame_rate).
+    @property
+    def position(self):
+        return self.rect.topleft
 
-        ** NOTE ** 
-        It is likely with this method that the rounding done when calculating 
-        velocity (since Rects only moves by pixels, integer values) that the 
-        total velocity will be wrong.  A future version should correct this.
+    @position.setter
+    def position(self, value):
+        self.rect.topleft = Vector2(value)
+
+    def update(self, collide_groups):
+        """
+        Update the sprite for a single frame of movement
         """
         super().update()
 
-        delta_d = self.velocity / frame_rate
-        delta_v = self.acceleration / frame_rate
+        delta_d = self.velocity
+        delta_v = self.acceleration
 
-        self.change_position(delta_d)
-        self.change_velocity(delta_v)
+        self.position += delta_d 
+        self.velocity += delta_v
 
         collisions = self._detect_collisions(collide_groups)
         self._handle_collisions(collisions)
@@ -52,7 +55,7 @@ class MovableSprite(AnimatedSprite):
                     self.rect.right = collision.rect.left
                 elif collision.rect.collidepoint(self.rect.midbottom):
                     self.rect.bottom = collision.rect.top
-                    self.change_velocity((0, -self.velocity.y))
+                    self.velocity += (0, -self.velocity.y)
                     self.jumping = False
                 elif collision.rect.collidepoint(self.rect.midleft):
                     self.rect.left = collision.rect.right
@@ -69,12 +72,3 @@ class MovableSprite(AnimatedSprite):
         collision_lists = [spritecollide(self, group, False) 
                             for group in collide_groups]
         return list(chain.from_iterable(collision_lists))   # flatten
-
-    def change_velocity(self, delta_v):
-        self.velocity += Vector2(delta_v)
-
-    def change_acceleration(self, delta_a):
-        self.acceleration += Vector2(delta_a)
-
-    def change_position(self, delta_d):
-        self.rect.topleft += Vector2(delta_d)
