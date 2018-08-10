@@ -1,10 +1,10 @@
 from boilerplate.game       import Game
 
-from example.game_state     import GameState
+from examples.game_state     import GameState
 
 
 def main():
-    game = Game("LD 42 Testing")
+    game = Game("Example")
     state = GameState()
     game.run(state)
 

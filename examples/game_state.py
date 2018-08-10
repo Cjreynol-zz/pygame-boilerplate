@@ -19,11 +19,12 @@ class GameState(GameStateABC):
     """
     """
     
-    GHOST_PATH = path.join("example", "assets", "boo_spritesheet.png")
+    IMG_DIR = path.join("examples", "assets")
+    GHOST_PATH = path.join(IMG_DIR, "boo_spritesheet.png")
     GHOST_SHEET_SIZE = (6, 1)
 
-    WALL_PATH = path.join("example", "assets", "wood_panel_tile.png")
-    PICKUP_PATH = path.join("example", "assets", "pickup_sheet.png")
+    WALL_PATH = path.join(IMG_DIR, "wood_panel_tile.png")
+    PICKUP_PATH = path.join(IMG_DIR, "pickup_sheet.png")
     PICKUP_SHEET_SIZE = (2, 1)
 
     def __init__(self):

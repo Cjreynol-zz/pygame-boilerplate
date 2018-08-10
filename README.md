@@ -1,18 +1,16 @@
-# Ludum Dare 42 Prep
+# Pygame Boilerplate code
 
-This repo is for testing some things in Pygame before LD42 starts, and also 
-to get a little boilerplate in place for whatever kind of game I decide to 
-make for it.
+This repository holds a number of classes to simplify the creation of games 
+using the Pygame library.  
 
 ### Version 1
-Moving a ghost sprite around the screen  
+Moving a sprite around the screen  
 
 ### Version 2
 Animated sprite moving on the screen  
 
 ### Version 3
-Smooth movement, automatic animation from a sprite sheet, and re-usable code 
-behind the scenes  
+Smooth movement, automatic animation from a sprite sheet
 
 ### Version 4
 Walls and floor, simple collisions, simple "gravity"  
