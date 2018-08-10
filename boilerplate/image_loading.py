@@ -13,23 +13,23 @@ def load_image(filepath):
         loaded_image = loaded_image.convert()
     return loaded_image
 
-def split_surface(surface, subsurface_size):
+def split_surface(sprite_sheet, subsurface_tuple):
     """
-    Return a list of Surface objects of the given size.
+    Return a list of Surface objects pulled from the sprite sheet.
 
-    The list will be in order from left to right, top to bottom.
-    A fully-filled rectangle that is an even multiple of the size is expected.
+    The list is in order from top to bottom, left to right.
+    The subsurface_tuple is expected to be (width, height).
     """
-    surfaces = []
+    subsurfaces = []
+    surface_rect = sprite_sheet.get_rect()
+    subsurface_size = (surface_rect.width // subsurface_tuple[0],
+                        surface_rect.height // subsurface_tuple[1])
+
     rect = Rect((0, 0), subsurface_size)
+    for i in range(subsurface_tuple[0]):
+        rect.left = i * rect.width
+        for j in range(subsurface_tuple[1]):
+            rect.top = j * rect.width
+            subsurfaces.append(sprite_sheet.subsurface(rect))
 
-    while rect.left < surface.get_width() and rect.top < surface.get_height():
-        new_surface = surface.subsurface(rect)
-        surfaces.append(new_surface)
-
-        rect.left += rect.width
-        if rect.left >= surface.get_width():
-            rect.left = 0
-            rect.top += rect.height
-
-    return surfaces
+    return subsurfaces

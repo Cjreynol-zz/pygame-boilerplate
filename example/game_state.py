@@ -40,12 +40,17 @@ class GameState(GameStateABC):
                             (1, Game.SCREEN_SIZE[1] // Game.SQUARE_SIZE[1]),
                             (Game.SCREEN_SIZE[0] - Game.SQUARE_SIZE[0], 0))
 
-        platform = Platform(wall_tile, (5, 1), 
+        platform_size = (5, 1)
+        platform = Platform(wall_tile, platform_size, 
                                 (Game.SCREEN_SIZE[0] // 2 
-                                    - Game.SQUARE_SIZE[0] * 2.5, 
-                                Game.SCREEN_SIZE[1] * 4 / 5))
+                                    - Game.SQUARE_SIZE[0], 
+                                Game.SCREEN_SIZE[1] * 5 / 6))
+        platform2 = Platform(wall_tile, platform_size,
+                                (Game.SCREEN_SIZE[0] // 2 
+                                    - Game.SQUARE_SIZE[0] * 4,
+                                Game.SCREEN_SIZE[1] * 3 / 5))
 
-        return [bottom, left, right, platform]
+        return [bottom, left, right, platform, platform2]
 
     def get_all_groups(self):
         return [self.ghost_group, self.wall_group]
