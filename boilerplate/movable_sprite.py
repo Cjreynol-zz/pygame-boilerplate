@@ -28,9 +28,10 @@ class MovableSprite(AnimatedSprite):
     def position(self, value):
         self.rect.topleft = Vector2(value)
 
-    def update(self, collide_groups):
+    def update(self, static_groups, collectable_groups):
         """
-        Update the sprite for a single frame of movement
+        Update the sprite for a single frame of movement, then detect and 
+        handle different collision types.
         """
         super().update()
 
@@ -40,8 +41,12 @@ class MovableSprite(AnimatedSprite):
         self.position += delta_d 
         self.velocity += delta_v
 
-        collisions = self._detect_collisions(collide_groups)
-        self._handle_collisions(collisions)
+        static_collisions = self._detect_collisions(static_groups)
+        self._handle_collisions(static_collisions)
+
+        collectable_collisions = self._detect_collisions(collectable_groups, 
+                                                            True)
+        return collectable_collisions
 
     def _handle_collisions(self, collisions):
         """
@@ -60,15 +65,15 @@ class MovableSprite(AnimatedSprite):
                 elif collision.rect.collidepoint(self.rect.midleft):
                     self.rect.left = collision.rect.right
 
-    def _detect_collisions(self, collide_groups):
+    def _detect_collisions(self, groups, kill = False):
         """
         Determine if this Sprite intersects any of the Sprites in any of the 
         collision groups.
 
         ** NOTE **
         Very simple, fails to act as expected if the velocity moves this 
-        Sprite through the colliding sprite
+        Sprite all the way through the colliding sprite
         """
-        collision_lists = [spritecollide(self, group, False) 
-                            for group in collide_groups]
+        collision_lists = [spritecollide(self, group, kill) 
+                            for group in groups]
         return list(chain.from_iterable(collision_lists))   # flatten

@@ -1,15 +1,16 @@
-from os                         import path
+from os                             import path
 
-from pygame.locals              import (QUIT, K_DOWN, K_ESCAPE, K_LEFT, 
-                                            K_UP, K_RIGHT, KEYDOWN, KEYUP)
-from pygame.sprite              import RenderUpdates
+from pygame.locals                  import (QUIT, K_DOWN, K_ESCAPE, K_LEFT, 
+                                                K_UP, K_RIGHT, KEYDOWN, KEYUP)
+from pygame.sprite                  import RenderUpdates
 
-from boilerplate.image_loading  import load_image
-from boilerplate.game           import Game
-from boilerplate.game_state_abc import GameStateABC
-from boilerplate.platform       import Platform
+from boilerplate.animated_sprite    import AnimatedSprite
+from boilerplate.image_loading      import load_image
+from boilerplate.game               import Game
+from boilerplate.game_state_abc     import GameStateABC
+from boilerplate.platform           import Platform
 
-from example.ghost              import Ghost
+from example.ghost                  import Ghost
 
 
 class GameState(GameStateABC):
@@ -17,6 +18,7 @@ class GameState(GameStateABC):
     """
     
     WALL_PATH = path.join("example", "assets", "wood_panel_tile.png")
+    PICKUP_PATH = path.join("example", "assets", "pickup_sheet.png")
 
     def __init__(self):
         super().__init__()
@@ -26,6 +28,9 @@ class GameState(GameStateABC):
 
         walls = self._create_walls()
         self.wall_group = RenderUpdates(*walls)
+
+        pickups = self._create_pickups()
+        self.pickup_group = RenderUpdates(*pickups)
 
     def _create_walls(self):
         wall_tile = load_image(self.WALL_PATH)
@@ -41,7 +46,7 @@ class GameState(GameStateABC):
                             (Game.SCREEN_SIZE[0] - Game.SQUARE_SIZE[0], 0))
 
         platform_size = (5, 1)
-        platform = Platform(wall_tile, platform_size, 
+        platform1 = Platform(wall_tile, platform_size, 
                                 (Game.SCREEN_SIZE[0] // 2 
                                     - Game.SQUARE_SIZE[0], 
                                 Game.SCREEN_SIZE[1] * 5 / 6))
@@ -50,13 +55,30 @@ class GameState(GameStateABC):
                                     - Game.SQUARE_SIZE[0] * 4,
                                 Game.SCREEN_SIZE[1] * 3 / 5))
 
-        return [bottom, left, right, platform, platform2]
+        return [bottom, left, right, platform1, platform2]
+
+    def _create_pickups(self):
+        pickup_sheet = load_image(self.PICKUP_PATH)
+        pickup1 = AnimatedSprite(pickup_sheet, (2, 1), 15, True)
+        pickup1.rect.topleft = (Game.SCREEN_SIZE[0] // 2 
+                                    - Game.SQUARE_SIZE[0], 
+                                Game.SCREEN_SIZE[1] * 5 / 6 
+                                    - Game.SQUARE_SIZE[1])
+        pickup2 = AnimatedSprite(pickup_sheet, (2, 1), 15, True)
+        pickup2.rect.topleft = (Game.SCREEN_SIZE[0] // 2 
+                                    - Game.SQUARE_SIZE[0] * 4,
+                                Game.SCREEN_SIZE[1] * 3 / 5 
+                                    - Game.SQUARE_SIZE[1])
+        return [pickup1, pickup2]
 
     def get_all_groups(self):
-        return [self.ghost_group, self.wall_group]
+        return [self.ghost_group, self.wall_group, self.pickup_group]
 
-    def get_collide_groups(self):
+    def get_static_groups(self):
         return [self.wall_group]
+
+    def get_collectable_groups(self):
+        return [self.pickup_group]
 
     def handle_events(self, event_list):
         for event in event_list:

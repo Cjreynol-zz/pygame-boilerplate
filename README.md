@@ -19,3 +19,6 @@ Walls and floor, simple collisions, simple "gravity"
 
 ### Version 5
 Better gravity and movement, kind of weird jumping  
+
+### Version 6
+Even better gravity and jumping, platforms, collectable items

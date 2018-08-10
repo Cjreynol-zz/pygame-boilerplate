@@ -15,9 +15,14 @@ class GameStateABC(ABC):
         pass
 
     @abstractmethod
-    def get_collide_groups(self):
+    def get_static_groups(self):
+        pass
+
+    @abstractmethod
+    def get_collectable_groups(self):
         pass
 
     def update(self):
         for group in self.get_all_groups():
-            group.update(self.get_collide_groups())
+            group.update(self.get_static_groups(), 
+                            self.get_collectable_groups())
