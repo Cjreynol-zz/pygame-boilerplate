@@ -35,7 +35,6 @@ class MovableSprite(MultiAnimatedSprite):
         super().update()
 
         self.position += self.velocity
-        #delta_d = self.velocity
         self.velocity += self.acceleration
 
         static_collisions = self._detect_collisions(static_groups)
@@ -43,7 +42,6 @@ class MovableSprite(MultiAnimatedSprite):
 
         collectable_collisions = self._detect_collisions(collectable_groups, 
                                                             True)
-        #return delta_d
         return collectable_collisions
 
     def _handle_collisions(self, collisions):

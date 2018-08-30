@@ -48,7 +48,7 @@ class Game:
             state.update(time_delta)
 
             self.screen.draw_all(state.get_all_groups(), 
-                                    state.player.last_move)
+                                    state.player.velocity)
             self.screen.update()
 
         quit()
