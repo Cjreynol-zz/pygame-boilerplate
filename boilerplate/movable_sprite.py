@@ -27,7 +27,7 @@ class MovableSprite(MultiAnimatedSprite):
     def position(self, value):
         self.rect.topleft = Vector2(value)
 
-    def update(self, static_groups, collectable_groups):
+    def update(self, static_groups, collectable_groups, time_delta):
         """
         Update the sprite for a single frame of movement, then detect and 
         handle different collision types.
@@ -35,6 +35,7 @@ class MovableSprite(MultiAnimatedSprite):
         super().update()
 
         self.position += self.velocity
+        #delta_d = self.velocity
         self.velocity += self.acceleration
 
         static_collisions = self._detect_collisions(static_groups)
@@ -42,6 +43,7 @@ class MovableSprite(MultiAnimatedSprite):
 
         collectable_collisions = self._detect_collisions(collectable_groups, 
                                                             True)
+        #return delta_d
         return collectable_collisions
 
     def _handle_collisions(self, collisions):
@@ -60,6 +62,13 @@ class MovableSprite(MultiAnimatedSprite):
                     self.jumping = False
                 elif collision.rect.collidepoint(self.rect.midleft):
                     self.rect.left = collision.rect.right
+
+    def _handle_collectables(self, collected):
+        """
+        Can be overriden by subclasses to execute some logic based on the 
+        gathered items.
+        """
+        pass
 
     def _detect_collisions(self, groups, kill = False):
         """

@@ -19,7 +19,7 @@ class GameState(GameStateABC):
     """
     """
     
-    IMG_DIR = path.join("examples", "assets")
+    IMG_DIR = path.join("examples", "test", "assets")
     GHOST_PATH = path.join(IMG_DIR, "boo_spritesheet.png")
     GHOST_SHEET_SIZE = (6, 1)
 
