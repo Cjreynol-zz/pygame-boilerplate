@@ -1,4 +1,4 @@
-from boilerplate.movable_sprite     import MovableSprite
+from boilerplate.movable_sprite import MovableSprite
 
 
 class PlatformerCharacter(MovableSprite):

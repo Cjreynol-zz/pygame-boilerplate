@@ -19,9 +19,6 @@ class Game:
         self.screen = GameScreen(title, self.SCREEN_SIZE)
         self.clock = Clock()
 
-    def run(self, state):
-        self.dirty_rect_run(state)
-        
     def dirty_rect_run(self, state):
         """
         Play the game until it reaches a final state. 
