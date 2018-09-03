@@ -15,6 +15,13 @@ class PlatformerCharacter(MovableSprite):
 
         self.acceleration += self.GRAVITY
 
+    def _handle_collisions(self, collisions):
+        super()._handle_collisions(collisions)
+        for collision in collisions:
+            if collision.rect.collidepoint(self.rect.midbottom):
+                self.velocity.y += -self.velocity.y
+                self.jumping = False
+
     def jump(self):
         if not self.jumping:
             self.velocity.y += -self.JUMP_VELOCITY

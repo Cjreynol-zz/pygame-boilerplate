@@ -56,8 +56,6 @@ class MovableSprite(MultiAnimatedSprite):
                     self.rect.right = collision.rect.left
                 elif collision.rect.collidepoint(self.rect.midbottom):
                     self.rect.bottom = collision.rect.top
-                    self.velocity.y += -self.velocity.y
-                    self.jumping = False
                 elif collision.rect.collidepoint(self.rect.midleft):
                     self.rect.left = collision.rect.right
 
